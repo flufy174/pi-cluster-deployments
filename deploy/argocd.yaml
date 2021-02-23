@@ -1,0 +1,5 @@
+helm install argocd argo/argo-cd \
+--namespace argocd \
+--create-namespace \
+--set global.image.repository="alinbalutoiu/argocd" \
+--wait

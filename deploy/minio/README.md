@@ -1,0 +1,1 @@
+helm install minio --namespace minio minio/minio
