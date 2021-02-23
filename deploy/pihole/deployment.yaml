@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pihole
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  namespace: pihole
+  labels:
+    app: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+        name: pihole
+    spec:
+      containers:
+        - name: pihole
+          image: pihole/pihole:latest
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "Australia/Sydney"
+            - name: WEBPASSWORD
+              value: "PiHolePassword"
+          volumeMounts:
+            - name: pihole-etc-volume
+              mountPath: "/etc/pihole"
+            - name: pihole-dnsmasq-volume
+              mountPath: "/etc/dnsmasq.d"
+      volumes:
+        - name: pihole-etc-volume
+          persistentVolumeClaim:
+            claimName: pihole-etc-volume-claim
+        - name: pihole-dnsmasq-volume
+          persistentVolumeClaim:
+            claimName: pihole-dnsmasq-volume-claim
